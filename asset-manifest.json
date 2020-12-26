@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/algosualizer/static/css/main.1f0d7498.chunk.css",
+    "main.js": "/algosualizer/static/js/main.951c1d09.chunk.js",
+    "main.js.map": "/algosualizer/static/js/main.951c1d09.chunk.js.map",
+    "runtime-main.js": "/algosualizer/static/js/runtime-main.63fed1bc.js",
+    "runtime-main.js.map": "/algosualizer/static/js/runtime-main.63fed1bc.js.map",
+    "static/js/2.fe07b6cd.chunk.js": "/algosualizer/static/js/2.fe07b6cd.chunk.js",
+    "static/js/2.fe07b6cd.chunk.js.map": "/algosualizer/static/js/2.fe07b6cd.chunk.js.map",
+    "static/js/3.fab7769d.chunk.js": "/algosualizer/static/js/3.fab7769d.chunk.js",
+    "static/js/3.fab7769d.chunk.js.map": "/algosualizer/static/js/3.fab7769d.chunk.js.map",
+    "index.html": "/algosualizer/index.html",
+    "static/css/main.1f0d7498.chunk.css.map": "/algosualizer/static/css/main.1f0d7498.chunk.css.map",
+    "static/js/2.fe07b6cd.chunk.js.LICENSE.txt": "/algosualizer/static/js/2.fe07b6cd.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/algosualizer/static/media/logo.6ce24c58.svg",
+    "static/media/shortest.1651674e.png": "/algosualizer/static/media/shortest.1651674e.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.63fed1bc.js",
+    "static/js/2.fe07b6cd.chunk.js",
+    "static/css/main.1f0d7498.chunk.css",
+    "static/js/main.951c1d09.chunk.js"
+  ]
+}
