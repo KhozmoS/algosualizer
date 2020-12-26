@@ -26,10 +26,10 @@ function App() {
         <Router>
         <Box className={classes.homeContainer}>
         <Switch>
-          <Route path="/shortest-path-visual">
+          <Route path="/algosualizer/shortest-path-visual">
             <ShortestPathVisual />
           </Route>
-          <Route path="/">
+          <Route path="/algosualizer">
             <Box className={classes.home}>
               <Home />              
             </Box>
