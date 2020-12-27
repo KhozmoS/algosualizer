@@ -3,11 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
 import { ShortestPathNodeProps } from "../models/ShortestPathNodeProps";
 import { ShortestPathNode } from "../components";
-const { ROWS, COLS } = { ROWS: 25, COLS: 50 } as { ROWS: number, COLS: number };
-const START_ROW = 12;
-const START_COL = 15;
-const FINISH_ROW = 12;
-const FINISH_COL = 40;
+const { ROWS, COLS } = { ROWS: 16, COLS: 40 } as { ROWS: number, COLS: number };
+const START_ROW = 8;
+const START_COL = 10;
+const FINISH_ROW = 8;
+const FINISH_COL = 30;
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -35,25 +35,21 @@ export function ShortestPathVisual() {
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
 
   React.useEffect(() => {
-    console.log("HERE");
     setGrid(initGrid());
   }, []);
   function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
     setAge(event.target.value as string);
   };
   function handleMouseDown(row: number, col: number) {
-    console.log("mouse down");
     setMouseIsDown(true);
     setGrid(updateGridSwapWall(row, col, grid));
   }
   function handleMouseUp() {
-    console.log("mouse up");
     setMouseIsDown(false);    
   }
   function handleMouseEnter(row: number, col: number) {
     if (!mouseIsDown) return;
     setGrid(updateGridSwapWall(row, col, grid));
-    console.log("mouse enter");
   }
   function renderRow(row: ShortestPathNodeProps[]) {
     return row.map((props, index) => {
