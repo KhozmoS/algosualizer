@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/algosualizer/static/css/main.4773992f.chunk.css",
-    "main.js": "/algosualizer/static/js/main.9cf4efab.chunk.js",
-    "main.js.map": "/algosualizer/static/js/main.9cf4efab.chunk.js.map",
+    "main.js": "/algosualizer/static/js/main.515479eb.chunk.js",
+    "main.js.map": "/algosualizer/static/js/main.515479eb.chunk.js.map",
     "runtime-main.js": "/algosualizer/static/js/runtime-main.63fed1bc.js",
     "runtime-main.js.map": "/algosualizer/static/js/runtime-main.63fed1bc.js.map",
     "static/js/2.fe07b6cd.chunk.js": "/algosualizer/static/js/2.fe07b6cd.chunk.js",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.63fed1bc.js",
     "static/js/2.fe07b6cd.chunk.js",
     "static/css/main.4773992f.chunk.css",
-    "static/js/main.9cf4efab.chunk.js"
+    "static/js/main.515479eb.chunk.js"
   ]
 }
