@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ShortestPathNodeProps } from "../../models";
+import { gridStore } from "../../store";
 import './ShortestPathNode.css';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -15,16 +16,39 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export function ShortestPathNode(props: ShortestPathNodeProps) {
+  const [isStart, ] = React.useState(props.isStart);
+  const [isFinish, ] = React.useState(props.isFinish);
+  const [isWall, setIsWall] = React.useState(props.isWall);
+  const [isVisited, setIsVisited] = React.useState(props.isVisited);
+  const [isInPath, setIsInPath] = React.useState(props.isInPath);
+
+  React.useEffect(() => {
+    const subs = gridStore.$grid.subscribe((item) => {
+      if (item) {
+        setIsWall(item[props.row][props.col].isWall);
+        setIsVisited(item[props.row][props.col].isVisited);
+        setIsInPath(item[props.row][props.col].isInPath);
+      }
+    });
+    return () => {
+      if (subs)
+        subs.unsubscribe();
+    };
+  })
+
+
   const classes = useStyles();
-  const extraClass = (props.isStart ? 'node-start' : 
-                      props.isFinish ? 'node-end' : 
-                      props.isWall ? 'node-wall' : '');
+  const extraClass = (isStart ? 'node-start' : 
+                      isFinish ? 'node-end' : 
+                      isWall ? 'node-wall' : 
+                      isVisited ? 'node-visited' : 
+                      isInPath ? 'node-solution' : '');
   return (
-    <td
+    <td      
       id={`node-${props.row}-${props.col}`}
       className={`${classes.node} ${extraClass}`}
-      onMouseDown={() => props.onMouseDownEvent(props.row, props.col)}
-      onMouseEnter={() => props.onMouseEnterEvent(props.row, props.col)}
+      onMouseDown={(e) => { e.stopPropagation(); props.onMouseDownEvent(props.row, props.col); }}
+      onMouseEnter={(e) => { e.stopPropagation(); props.onMouseEnterEvent(props.row, props.col); }}
       onMouseUp={() => props.onMouseUpEvent()}
     >
     </td>

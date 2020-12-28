@@ -1,13 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
 import { ShortestPathNodeProps } from "../models/ShortestPathNodeProps";
 import { ShortestPathNode } from "../components";
-const { ROWS, COLS } = { ROWS: 16, COLS: 40 } as { ROWS: number, COLS: number };
-const START_ROW = 8;
+import { RunBfs, visitedNodes, pathNodes } from "../utilities/algorithms/bfs";
+import { gridStore } from "../store";
+const { ROWS, COLS } = { ROWS: 25, COLS: 50 } as { ROWS: number, COLS: number };
+const START_ROW = 12;
 const START_COL = 10;
-const FINISH_ROW = 8;
-const FINISH_COL = 30;
+const FINISH_ROW = 12;
+const FINISH_COL = 40;
+
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -27,29 +30,47 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderSpacing: 0
   }
 }));
-
+let grid = initGrid() as ShortestPathNodeProps[][];
 export function ShortestPathVisual() {
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
-  const [grid, setGrid] = React.useState([] as ShortestPathNodeProps[][]);
+  const [age, setAge] = React.useState('');  
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
 
   React.useEffect(() => {
-    setGrid(initGrid());
+    grid = initGrid();
+    gridStore.setGrid(grid);
+    return () => {
+      gridStore.setGrid(initGrid());
+    }
   }, []);
   function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
     setAge(event.target.value as string);
   };
   function handleMouseDown(row: number, col: number) {
     setMouseIsDown(true);
-    setGrid(updateGridSwapWall(row, col, grid));
+    grid[row][col].isWall = true;
+    gridStore.setGrid(grid);
   }
   function handleMouseUp() {
-    setMouseIsDown(false);    
+    setMouseIsDown(false);
   }
   function handleMouseEnter(row: number, col: number) {
     if (!mouseIsDown) return;
-    setGrid(updateGridSwapWall(row, col, grid));
+    grid[row][col].isWall = true;
+    gridStore.setGrid(grid);
+  }
+  function handleRunAlgo() {
+    RunBfs(grid, { x: START_ROW, y: START_COL }, { x: FINISH_ROW, y: FINISH_COL });
+    visitedNodes.forEach((node, index) => {      
+      setTimeout(() => { 
+        grid[node.row][node.col].isWall = false;
+        grid[node.row][node.col].isVisited = true;
+        gridStore.setGrid(grid);
+        if (index+1 === visitedNodes.length) {
+          paintSolutionPath(pathNodes);
+        }
+      }, index*10);
+    });
   }
   function renderRow(row: ShortestPathNodeProps[]) {
     return row.map((props, index) => {
@@ -86,6 +107,11 @@ export function ShortestPathVisual() {
         </FormControl>
       </Box>
       <Box>
+        <Box textAlign="center" padding={2}>
+          <Button variant="contained" color="primary" onClick={() => handleRunAlgo()}>
+            Start BFS
+          </Button>
+        </Box>
         <table cellSpacing={0} cellPadding={0} style={{margin: '20px auto'}}>
           <tbody>
             { grid.map((row, index) => {
@@ -96,7 +122,7 @@ export function ShortestPathVisual() {
               )
             })}
           </tbody>
-        </table>
+        </table>                                    
       </Box>
     </Box>
   );
@@ -122,13 +148,14 @@ function initGrid() {
   }
   return g;
 }
-function updateGridSwapWall(row: number, col: number, grid: ShortestPathNodeProps[][]) {
-  const newGrid = grid.slice();
-  if (!grid[row][col].isFinish && !grid[row][col].isStart) {
-    newGrid[row][col] = {
-      ...grid[row][col],
-      isWall: !grid[row][col].isWall
-    };
-  }
-  return newGrid;
+
+function paintSolutionPath(path: ShortestPathNodeProps[]) {
+  path.forEach((node, index) => {    
+    setTimeout(() => {
+      grid[node.row][node.col].isVisited = false;
+      grid[node.row][node.col].isWall = false;
+      grid[node.row][node.col].isInPath = true;
+      gridStore.setGrid(grid);
+    }, index*10)    
+  });
 }

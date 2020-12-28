@@ -29,7 +29,7 @@ export function TopBar() {
       <AppBar position="static">
         <Toolbar>          
           <Typography variant="h4" className={classes.title}>
-            ALGO <img className={classes.logo} src={logo} alt=""/> SUALIZER
+            ALGOSUALIZER
           </Typography>
         </Toolbar>
       </AppBar>
