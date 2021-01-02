@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/algosualizer/static/css/main.23182e80.chunk.css",
-    "main.js": "/algosualizer/static/js/main.c61202fe.chunk.js",
-    "main.js.map": "/algosualizer/static/js/main.c61202fe.chunk.js.map",
+    "main.css": "/algosualizer/static/css/main.b0dae0a7.chunk.css",
+    "main.js": "/algosualizer/static/js/main.af803384.chunk.js",
+    "main.js.map": "/algosualizer/static/js/main.af803384.chunk.js.map",
     "runtime-main.js": "/algosualizer/static/js/runtime-main.5d14a164.js",
     "runtime-main.js.map": "/algosualizer/static/js/runtime-main.5d14a164.js.map",
-    "static/js/2.c0aeefe2.chunk.js": "/algosualizer/static/js/2.c0aeefe2.chunk.js",
-    "static/js/2.c0aeefe2.chunk.js.map": "/algosualizer/static/js/2.c0aeefe2.chunk.js.map",
+    "static/js/2.8163be96.chunk.js": "/algosualizer/static/js/2.8163be96.chunk.js",
+    "static/js/2.8163be96.chunk.js.map": "/algosualizer/static/js/2.8163be96.chunk.js.map",
     "static/js/3.26a1f232.chunk.js": "/algosualizer/static/js/3.26a1f232.chunk.js",
     "static/js/3.26a1f232.chunk.js.map": "/algosualizer/static/js/3.26a1f232.chunk.js.map",
     "index.html": "/algosualizer/index.html",
-    "static/css/main.23182e80.chunk.css.map": "/algosualizer/static/css/main.23182e80.chunk.css.map",
-    "static/js/2.c0aeefe2.chunk.js.LICENSE.txt": "/algosualizer/static/js/2.c0aeefe2.chunk.js.LICENSE.txt",
+    "static/css/main.b0dae0a7.chunk.css.map": "/algosualizer/static/css/main.b0dae0a7.chunk.css.map",
+    "static/js/2.8163be96.chunk.js.LICENSE.txt": "/algosualizer/static/js/2.8163be96.chunk.js.LICENSE.txt",
     "static/media/shortest.1651674e.png": "/algosualizer/static/media/shortest.1651674e.png"
   },
   "entrypoints": [
     "static/js/runtime-main.5d14a164.js",
-    "static/js/2.c0aeefe2.chunk.js",
-    "static/css/main.23182e80.chunk.css",
-    "static/js/main.c61202fe.chunk.js"
+    "static/js/2.8163be96.chunk.js",
+    "static/css/main.b0dae0a7.chunk.css",
+    "static/js/main.af803384.chunk.js"
   ]
 }
