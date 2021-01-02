@@ -1,7 +1,8 @@
 .node-start {
-  background-color: blue;
+  background-color: rgb(30, 114, 4);
+  border-radius: 50%;
   animation-name: growAnimation;
-  animation-duration: 0.3s;
+  animation-duration: 0.6s;
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
@@ -10,7 +11,16 @@
   animation-play-state: running;
 }
 .node-end {
-  background-color: red;  
+  background-color: red;
+  border-radius: 50%;
+  animation-name: growAnimation;
+  animation-duration: 0.6s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 .node-wall {  
   background-color: rgb(12, 53, 71);
