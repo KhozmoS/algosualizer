@@ -3,8 +3,8 @@ import { ShortestPathNodeProps } from "../../models";
 const stepX = [0, 1, 0, -1];
 const stepY = [1, 0, -1, 0];
 
-export let visitedNodes = [] as ShortestPathNodeProps[];
-export let pathNodes = [] as ShortestPathNodeProps[];
+let visitedNodes = [] as ShortestPathNodeProps[];
+let pathNodes = [] as ShortestPathNodeProps[];
 type Point = { x: number, y: number };
 
 export function RunBfs(grid:ShortestPathNodeProps[][], start: Point, end: Point) {
@@ -28,12 +28,13 @@ export function RunBfs(grid:ShortestPathNodeProps[][], start: Point, end: Point)
         parentsMatrix[nwX][nwY] = (node.row === start.x && node.col === start.y ? null : node);
         if (nwX === end.x && nwY === end.y) {
           setSolutionPath(parentsMatrix, end);
-          return;
+          return [visitedNodes, pathNodes];
         }
         visitedNodes.push(grid[nwX][nwY]);
       }
     }
   }
+  return [visitedNodes, pathNodes];
 }
 
 

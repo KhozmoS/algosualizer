@@ -1,16 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
-import { ShortestPathNodeProps } from "../models/ShortestPathNodeProps";
+import { ShortestPathNodeProps, Point } from "../models";
 import { ShortestPathNode } from "../components";
-import { RunBfs, visitedNodes, pathNodes } from "../utilities/algorithms/bfs";
+import { RunBfs } from "../utilities/algorithms/bfs";
 import { gridStore } from "../store";
-const { ROWS, COLS } = { ROWS: 25, COLS: 50 } as { ROWS: number, COLS: number };
-const START_ROW = 12;
-const START_COL = 10;
-const FINISH_ROW = 12;
-const FINISH_COL = 40;
-
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -30,37 +24,70 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderSpacing: 0
   }
 }));
-let grid = initGrid() as ShortestPathNodeProps[][];
+
+let grid = gridStore.initGrid() as ShortestPathNodeProps[][];
 export function ShortestPathVisual() {
   const classes = useStyles();
   const [age, setAge] = React.useState('');  
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
+  const [startSelected, setStartSelected] = React.useState(false);
+  const [start, setStart] = React.useState<Point>({ x: 0, y: 0 });
+  const [finish, setFinish] = React.useState<Point>({ x: 0, y: 0 });
 
   React.useEffect(() => {
-    grid = initGrid();
+    grid = gridStore.initGrid();
     gridStore.setGrid(grid);
     return () => {
-      gridStore.setGrid(initGrid());
+      gridStore.setGrid(gridStore.initGrid());
     }
+  }, []);
+  React.useEffect(() => {
+    const subs = gridStore.$start.subscribe((start) => {
+      setStart(start);
+    });
+    return () => {
+      if (subs)
+        subs.unsubscribe();
+    };
+  }, []);
+  React.useEffect(() => {
+    const subs = gridStore.$finish.subscribe((finish) => {
+      setFinish(finish);
+    });
+    return () => {
+      if (subs)
+        subs.unsubscribe();
+    };
   }, []);
   function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
     setAge(event.target.value as string);
   };
   function handleMouseDown(row: number, col: number) {
     setMouseIsDown(true);
-    grid[row][col].isWall = true;
+    if (grid[row][col].isStart) {
+      setStartSelected(true);
+    } else {
+      grid[row][col].isWall = true;
+    }
     gridStore.setGrid(grid);
   }
   function handleMouseUp() {
     setMouseIsDown(false);
+    setStartSelected(false);
   }
   function handleMouseEnter(row: number, col: number) {
     if (!mouseIsDown) return;
-    grid[row][col].isWall = true;
+    if (startSelected) {
+      if (start) grid[start.x][start.y].isStart = false;
+      grid[row][col].isStart = true;
+      gridStore.setStart({x: row, y: col});
+    } else {
+      grid[row][col].isWall = true;
+    }
     gridStore.setGrid(grid);
   }
   function handleRunAlgo() {
-    RunBfs(grid, { x: START_ROW, y: START_COL }, { x: FINISH_ROW, y: FINISH_COL });
+    const [visitedNodes, pathNodes] = RunBfs(grid, start, finish);
     visitedNodes.forEach((node, index) => {      
       setTimeout(() => { 
         grid[node.row][node.col].isWall = false;
@@ -126,36 +153,14 @@ export function ShortestPathVisual() {
       </Box>
     </Box>
   );
-  
-}
-
-
-function initGrid() {
-  const g = [] as ShortestPathNodeProps[][];
-  for (let i = 0; i < ROWS; ++i)
-  {
-    let row = [] as ShortestPathNodeProps[];
-    for (let j = 0; j < COLS; ++j)
-    {
-      row.push({
-        row: i,
-        col: j,
-        isStart: i === START_ROW && j === START_COL,
-        isFinish: i === FINISH_ROW && j === FINISH_COL
-      } as ShortestPathNodeProps)
-    }
-    g.push(row);
+  function paintSolutionPath(path: ShortestPathNodeProps[]) {
+    path.forEach((node, index) => {    
+      setTimeout(() => {
+        grid[node.row][node.col].isVisited = false;
+        grid[node.row][node.col].isWall = false;
+        grid[node.row][node.col].isInPath = true;
+        gridStore.setGrid(grid);
+      }, index*10)    
+    });
   }
-  return g;
-}
-
-function paintSolutionPath(path: ShortestPathNodeProps[]) {
-  path.forEach((node, index) => {    
-    setTimeout(() => {
-      grid[node.row][node.col].isVisited = false;
-      grid[node.row][node.col].isWall = false;
-      grid[node.row][node.col].isInPath = true;
-      gridStore.setGrid(grid);
-    }, index*10)    
-  });
 }

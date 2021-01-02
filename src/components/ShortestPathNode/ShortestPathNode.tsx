@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export function ShortestPathNode(props: ShortestPathNodeProps) {
-  const [isStart, ] = React.useState(props.isStart);
+  const [isStart, setIsStart] = React.useState(props.isStart);
   const [isFinish, ] = React.useState(props.isFinish);
   const [isWall, setIsWall] = React.useState(props.isWall);
   const [isVisited, setIsVisited] = React.useState(props.isVisited);
@@ -25,6 +25,7 @@ export function ShortestPathNode(props: ShortestPathNodeProps) {
   React.useEffect(() => {
     const subs = gridStore.$grid.subscribe((item) => {
       if (item) {
+        setIsStart(item[props.row][props.col].isStart);
         setIsWall(item[props.row][props.col].isWall);
         setIsVisited(item[props.row][props.col].isVisited);
         setIsInPath(item[props.row][props.col].isInPath);
