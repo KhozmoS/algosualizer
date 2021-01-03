@@ -6,12 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@material-ui/core';
 import theme from "./utilities/global.theme";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>,
+
+ReactDOM.render(  
+  <ThemeProvider theme={theme}>
+    <App />
+  </ThemeProvider>,
   document.getElementById('root')
 );
 

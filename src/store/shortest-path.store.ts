@@ -12,6 +12,7 @@ const grid = new BehaviorSubject<ShortestPathNodeProps[][]>(initGrid());
 
 export const gridStore = {
   initGrid,
+  randomGridWeigths,
   $grid: grid.asObservable(),
   $start: start.asObservable(),
   $finish: finish.asObservable(),
@@ -22,6 +23,8 @@ export const gridStore = {
 
 
 function initGrid() {
+  start.next({ x: START_ROW, y: START_COL });
+  finish.next({ x: FINISH_ROW, y: FINISH_COL });
   const g = [] as ShortestPathNodeProps[][];
   for (let i = 0; i < ROWS; ++i)
   {
@@ -32,7 +35,29 @@ function initGrid() {
         row: i,
         col: j,
         isStart: i === START_ROW && j === START_COL,
-        isFinish: i === FINISH_ROW && j === FINISH_COL
+        isFinish: i === FINISH_ROW && j === FINISH_COL,
+        weigth: 0
+      } as ShortestPathNodeProps)
+    }
+    g.push(row);
+  }
+  return g;
+}
+function randomGridWeigths() {
+  start.next({ x: START_ROW, y: START_COL });
+  finish.next({ x: FINISH_ROW, y: FINISH_COL });
+  const g = [] as ShortestPathNodeProps[][];
+  for (let i = 0; i < ROWS; ++i)
+  {
+    let row = [] as ShortestPathNodeProps[];
+    for (let j = 0; j < COLS; ++j)
+    {
+      row.push({
+        row: i,
+        col: j,
+        isStart: i === START_ROW && j === START_COL,
+        isFinish: i === FINISH_ROW && j === FINISH_COL,
+        weigth: Math.floor(Math.random() * 99) + 1
       } as ShortestPathNodeProps)
     }
     g.push(row);

@@ -1,5 +1,5 @@
 import { ShortestPathNodeProps } from "../../models";
-
+import { getEmptyBooleanArray, isValidMove, getEmptyParentMatrix, getSolutionPath } from "./shared";
 const stepX = [0, 1, 0, -1];
 const stepY = [1, 0, -1, 0];
 
@@ -27,7 +27,7 @@ export function RunBfs(grid:ShortestPathNodeProps[][], start: Point, end: Point)
         // WE DONT INCLUDE START NODE IN PARENT MATRIX
         parentsMatrix[nwX][nwY] = (node.row === start.x && node.col === start.y ? null : node);
         if (nwX === end.x && nwY === end.y) {
-          setSolutionPath(parentsMatrix, end);
+          pathNodes = getSolutionPath(parentsMatrix, end);
           return [visitedNodes, pathNodes];
         }
         visitedNodes.push(grid[nwX][nwY]);
@@ -35,48 +35,4 @@ export function RunBfs(grid:ShortestPathNodeProps[][], start: Point, end: Point)
     }
   }
   return [visitedNodes, pathNodes];
-}
-
-
-const getEmptyBooleanArray = (rows: number, cols: number) => {
-  const visited = [] as boolean[][];
-  for (let i = 0; i < rows; i++) {
-    let row = [] as boolean[];
-    for (let j = 0; j < cols; j++) {
-      row.push(false);
-    }
-    visited.push(row);
-  }
-  return visited;
-}
-const getEmptyParentMatrix = (rows: number, cols: number) => {
-  const parentMatrix = [] as (ShortestPathNodeProps| null)[][];
-  for (let i = 0; i < rows; i++) {
-    let row = [] as (ShortestPathNodeProps | null)[];
-    for (let j = 0; j < cols; j++) {
-      row.push(null);
-    }
-    parentMatrix.push(row);
-  }
-  return parentMatrix;
-}
-const isValidMove = (
-    x: number, 
-    y: number, 
-    grid: ShortestPathNodeProps[][],
-    visited: boolean[][]
-  ): boolean => {
-  if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length) return false;
-  if (visited[x][y]) return false;  
-  if (grid[x][y].isWall) return false;
-  
-  return true;
-}
-const setSolutionPath = (parentsMatrix: (ShortestPathNodeProps| null)[][], tmp: Point) => {  
-  while(parentsMatrix[tmp.x][tmp.y] !== null) {
-    const parentNode = parentsMatrix[tmp.x][tmp.y] as ShortestPathNodeProps;
-    pathNodes.unshift(parentNode);
-    tmp.x = parentNode.row as number;
-    tmp.y = parentNode.col as number;
-  }
 }

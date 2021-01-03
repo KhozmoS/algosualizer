@@ -1,4 +1,5 @@
 .node-start {
+  color: white;
   background-color: rgb(30, 114, 4);
   border-radius: 50%;
   animation-name: growAnimation;
@@ -11,6 +12,7 @@
   animation-play-state: running;
 }
 .node-end {
+  color: white;
   background-color: red;
   border-radius: 50%;
   animation-name: growAnimation;
@@ -22,7 +24,7 @@
   animation-fill-mode: forwards;
   animation-play-state: running;
 }
-.node-wall {  
+.node-wall {
   background-color: rgb(12, 53, 71);
   animation-name: growAnimation;
   animation-duration: 0.3s;
@@ -46,6 +48,7 @@
   }
 }
 .node-visited {
+  color: white;
   animation-name: visitedAnimation;
   animation-duration: 1.5s;
   animation-timing-function: ease-out;
@@ -77,6 +80,7 @@
   }
 }
 .node-solution {
+  color: white;
   background-color: #28ff70;
   animation-name: solutionAnimation;
   animation-duration: 0.3s;

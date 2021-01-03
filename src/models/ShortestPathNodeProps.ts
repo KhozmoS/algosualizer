@@ -6,6 +6,7 @@ export interface ShortestPathNodeProps {
   isWall: boolean;
   isVisited: boolean;
   isInPath: boolean;
+  weigth: number;
   onMouseDownEvent: (row: number, col: number) => void;
   onMouseEnterEvent: (row: number, col: number) => void;
   onMouseUpEvent: () => void;

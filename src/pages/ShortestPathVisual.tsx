@@ -1,9 +1,20 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
-import { ShortestPathNodeProps, Point } from "../models";
+import { 
+  Box, 
+  Button, 
+  FormControl, 
+  Grid, 
+  InputLabel, 
+  MenuItem, 
+  Select, 
+  Theme,
+  IconButton
+} from '@material-ui/core';
+import { Refresh } from "@material-ui/icons";
+import { ShortestPathNodeProps, Point, Algorithm } from "../models";
 import { ShortestPathNode } from "../components";
-import { RunBfs } from "../utilities/algorithms/bfs";
+import { RunBfs, RunDijkstra } from "../utilities/algorithms";
 import { gridStore } from "../store";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -14,8 +25,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: theme.palette.primary.light,
   },
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 200,
+    backgroundColor: "#ffffff"
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -28,9 +39,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 let grid = gridStore.initGrid() as ShortestPathNodeProps[][];
 export function ShortestPathVisual() {
   const classes = useStyles();
-  const [age, setAge] = React.useState('');  
+  const [algo, setAlgo] = React.useState<Algorithm|''>('');
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
   const [startSelected, setStartSelected] = React.useState(false);
+  const [finishSelected, setFinishSelected] = React.useState(false);
   const [start, setStart] = React.useState<Point>({ x: 0, y: 0 });
   const [finish, setFinish] = React.useState<Point>({ x: 0, y: 0 });
 
@@ -59,13 +71,28 @@ export function ShortestPathVisual() {
         subs.unsubscribe();
     };
   }, []);
+  function reestartGrid(v: Algorithm) {
+    if (v === Algorithm.DIJKSTRA) {
+      grid = gridStore.randomGridWeigths();
+      gridStore.setGrid(grid);
+    } else {
+      grid = gridStore.initGrid();
+      gridStore.setGrid(grid);
+    }    
+  }
   function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
-    setAge(event.target.value as string);
+    const v = event.target.value;
+    setAlgo(v as Algorithm);    
+    if (v === Algorithm.DIJKSTRA) {
+      reestartGrid(v);
+    }
   };
   function handleMouseDown(row: number, col: number) {
     setMouseIsDown(true);
     if (grid[row][col].isStart) {
       setStartSelected(true);
+    } else if (grid[row][col].isFinish) {
+      setFinishSelected(true);
     } else {
       grid[row][col].isWall = true;
     }
@@ -74,20 +101,35 @@ export function ShortestPathVisual() {
   function handleMouseUp() {
     setMouseIsDown(false);
     setStartSelected(false);
+    setFinishSelected(false);
   }
   function handleMouseEnter(row: number, col: number) {
     if (!mouseIsDown) return;
-    if (startSelected) {
+    if (startSelected && !grid[row][col].isFinish) {
       if (start) grid[start.x][start.y].isStart = false;
       grid[row][col].isStart = true;
       gridStore.setStart({x: row, y: col});
+    } else if (finishSelected && !grid[row][col].isStart) {
+      if (finish) grid[finish.x][finish.y].isFinish = false;
+      grid[row][col].isFinish = true;
+      gridStore.setFinish({x: row, y: col});
     } else {
       grid[row][col].isWall = true;
     }
     gridStore.setGrid(grid);
   }
+  function runSelectedAlgo() {
+    switch (algo) {
+      case Algorithm.BFS:
+        return RunBfs(grid, start, finish);
+      case Algorithm.DIJKSTRA:
+        return RunDijkstra(grid, start, finish);
+      default:
+        return [[], []];
+    }
+  }
   function handleRunAlgo() {
-    const [visitedNodes, pathNodes] = RunBfs(grid, start, finish);
+    const [visitedNodes, pathNodes] = runSelectedAlgo();
     visitedNodes.forEach((node, index) => {      
       setTimeout(() => { 
         grid[node.row][node.col].isWall = false;
@@ -115,30 +157,52 @@ export function ShortestPathVisual() {
   return (
     <Box>
       <Box className={classes.menu}>
-        <FormControl variant="outlined" className={classes.formControl} size="small">
-          <InputLabel id="demo-simple-select-outlined-label">Algorithm</InputLabel>
-          <Select            
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={age}
-            onChange={handleChange}
-            label="Algorithm"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <Grid container>
+          <Grid item xs={6}>
+            <Box padding={1}>
+              <FormControl
+                variant="filled" 
+                className={classes.formControl} 
+                size="small"
+              >
+                <InputLabel id="algo-select-label">Algorithm</InputLabel>
+                <Select
+                  labelId="algo-select-label"
+                  id="algo-select"
+                  value={algo}
+                  onChange={handleChange}
+                  label="Algorithm"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={Algorithm.BFS}>
+                    {Algorithm.BFS}
+                  </MenuItem>
+                  <MenuItem value={Algorithm.DIJKSTRA}>
+                    {Algorithm.DIJKSTRA}
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box padding={1} style={{textAlign: "right"}}>
+              <IconButton onClick={() => reestartGrid(algo as Algorithm)}>
+                <Refresh></Refresh>
+              </IconButton>
+              <Button
+                variant="contained" 
+                color="primary" 
+                onClick={() => handleRunAlgo()}
+              >
+                RUN
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
       <Box>
-        <Box textAlign="center" padding={2}>
-          <Button variant="contained" color="primary" onClick={() => handleRunAlgo()}>
-            Start BFS
-          </Button>
-        </Box>
         <table cellSpacing={0} cellPadding={0} style={{margin: '20px auto'}}>
           <tbody>
             { grid.map((row, index) => {
