@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 let grid = gridStore.initGrid() as ShortestPathNodeProps[][];
 export function ShortestPathVisual() {
   const classes = useStyles();
+  const [blocked, setBlocked] = React.useState(false);
   const [algo, setAlgo] = React.useState<Algorithm|''>('');
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
   const [startSelected, setStartSelected] = React.useState(false);
@@ -83,11 +84,10 @@ export function ShortestPathVisual() {
   function handleChange(event: React.ChangeEvent<{ value: unknown }>) {
     const v = event.target.value;
     setAlgo(v as Algorithm);    
-    if (v === Algorithm.DIJKSTRA) {
-      reestartGrid(v);
-    }
+    reestartGrid(v as Algorithm);
   };
   function handleMouseDown(row: number, col: number) {
+    if (blocked) return;
     setMouseIsDown(true);
     if (grid[row][col].isStart) {
       setStartSelected(true);
@@ -130,22 +130,39 @@ export function ShortestPathVisual() {
   }
   function handleRunAlgo() {
     const [visitedNodes, pathNodes] = runSelectedAlgo();
-    visitedNodes.forEach((node, index) => {      
-      setTimeout(() => { 
-        grid[node.row][node.col].isWall = false;
-        grid[node.row][node.col].isVisited = true;
-        gridStore.setGrid(grid);
-        if (index+1 === visitedNodes.length) {
-          paintSolutionPath(pathNodes);
-        }
-      }, index*10);
-    });
+    if (visitedNodes.length === 0) {
+      return;
+    }
+    setBlocked(true);    
+    visitedNodes.reduce((prev, node, index) => {
+      if (prev[node.row][node.col] === false) {
+        setTimeout(() => { 
+          grid[node.row][node.col].isWall = false;
+          grid[node.row][node.col].isVisited = true;
+          gridStore.setGrid(grid);
+          if (index+1 === visitedNodes.length) {
+            paintSolutionPath(pathNodes);
+          }
+        }, index*10);
+        prev[node.row][node.col] = true;
+      } else {
+        setTimeout(() => {
+          grid[node.row][node.col].isVisited = false;
+          grid[node.row][node.col].isReVisited = true;
+          gridStore.setGrid(grid);
+          if (index+1 === visitedNodes.length) {
+            paintSolutionPath(pathNodes);
+          }
+        }, index*10);
+      }
+      return prev;
+    }, emptyBooleanMatrix(grid.length, grid[0].length));
   }
   function renderRow(row: ShortestPathNodeProps[]) {
-    return row.map((props, index) => {
+    return row.map((props) => {
       return (        
         <ShortestPathNode
-          key={index}
+          key={`${props.row}-${props.col}`}
           { ...props } 
           onMouseDownEvent={handleMouseDown}
           onMouseEnterEvent={handleMouseEnter}
@@ -172,6 +189,7 @@ export function ShortestPathVisual() {
                   value={algo}
                   onChange={handleChange}
                   label="Algorithm"
+                  disabled={blocked}
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -188,10 +206,14 @@ export function ShortestPathVisual() {
           </Grid>
           <Grid item xs={6}>
             <Box padding={1} style={{textAlign: "right"}}>
-              <IconButton onClick={() => reestartGrid(algo as Algorithm)}>
+              <IconButton 
+                disabled={blocked}
+                onClick={() => reestartGrid(algo as Algorithm)}
+              >
                 <Refresh></Refresh>
               </IconButton>
               <Button
+                disabled={blocked}
                 variant="contained" 
                 color="primary" 
                 onClick={() => handleRunAlgo()}
@@ -218,13 +240,27 @@ export function ShortestPathVisual() {
     </Box>
   );
   function paintSolutionPath(path: ShortestPathNodeProps[]) {
-    path.forEach((node, index) => {    
+    setBlocked(false);
+    path.forEach((node, index) => {
       setTimeout(() => {
         grid[node.row][node.col].isVisited = false;
+        grid[node.row][node.col].isReVisited = false;
         grid[node.row][node.col].isWall = false;
         grid[node.row][node.col].isInPath = true;
         gridStore.setGrid(grid);
-      }, index*10)    
+      }, index*10)
     });
   }
+}
+
+const emptyBooleanMatrix = (rows: number, cols: number) => {
+  const mk = [] as boolean[][];
+  for (let i = 0; i < rows; i++) {
+    const row = [] as boolean[];
+    for (let j = 0; j < cols; j++) {
+      row.push(false);
+    }
+    mk.push(row);
+  }
+  return mk;
 }

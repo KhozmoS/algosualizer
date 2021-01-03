@@ -1,6 +1,4 @@
 .node-start {
-  color: white;
-  background-color: rgb(30, 114, 4);
   border-radius: 50%;
   animation-name: growAnimation;
   animation-duration: 0.6s;
@@ -12,8 +10,6 @@
   animation-play-state: running;
 }
 .node-end {
-  color: white;
-  background-color: red;
   border-radius: 50%;
   animation-name: growAnimation;
   animation-duration: 0.6s;
@@ -45,6 +41,38 @@
   }
   100% {
     transform: scale(1.0);
+  }
+}
+.node-revisited {
+  color: white;
+  animation-name: reVisitedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+@keyframes reVisitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+  
+  50% {
+    background-color: rgba(73, 34, 179, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(110, 12, 134, 0.75);
+  }
+  
+  100% {
+    transform: scale(1);
+    background-color: rgba(211, 18, 250, 0.75);
   }
 }
 .node-visited {

@@ -3,7 +3,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ShortestPathNodeProps } from "../../models";
 import { gridStore } from "../../store";
 import './ShortestPathNode.css';
-
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
@@ -22,6 +23,7 @@ export function ShortestPathNode(props: ShortestPathNodeProps) {
   const [isFinish, setIsFinish] = React.useState(props.isFinish);
   const [isWall, setIsWall] = React.useState(props.isWall);
   const [isVisited, setIsVisited] = React.useState(props.isVisited);
+  const [isReVisited, setIsReVisited] = React.useState(props.isReVisited);
   const [isInPath, setIsInPath] = React.useState(props.isInPath);
   const [weigth, setWeigth] = React.useState(props.weigth);
   React.useEffect(() => {
@@ -31,7 +33,8 @@ export function ShortestPathNode(props: ShortestPathNodeProps) {
         setIsFinish(item[props.row][props.col].isFinish);
         setIsWall(item[props.row][props.col].isWall);
         setIsVisited(item[props.row][props.col].isVisited);
-        setIsInPath(item[props.row][props.col].isInPath);
+        setIsReVisited(item[props.row][props.col].isReVisited);
+        setIsInPath(item[props.row][props.col].isInPath);        
         setWeigth(item[props.row][props.col].weigth);
       }
     });
@@ -40,14 +43,19 @@ export function ShortestPathNode(props: ShortestPathNodeProps) {
         subs.unsubscribe();
     };
   })
-
-
+  
   const classes = useStyles();
   const extraClass = (isStart ? 'node-start' : 
                       isFinish ? 'node-end' : 
                       isWall ? 'node-wall' : 
-                      isVisited ? 'node-visited' : 
+                      isVisited ? 'node-visited' :
+                      isReVisited ? 'node-revisited' :
                       isInPath ? 'node-solution' : '');
+  function renderInnerContent() {
+    if (weigth && !isWall && !isStart && !isFinish) return weigth;
+    else if (isStart) return <ArrowForwardIosIcon />
+    else if (isFinish) return <GpsFixedIcon />
+  }
   return (
     <td      
       id={`node-${props.row}-${props.col}`}
@@ -56,7 +64,7 @@ export function ShortestPathNode(props: ShortestPathNodeProps) {
       onMouseEnter={(e) => { e.preventDefault(); props.onMouseEnterEvent(props.row, props.col); }}
       onMouseUp={(e) => { e.preventDefault(); props.onMouseUpEvent();}}
     >
-      {weigth && !isWall && !isStart && !isFinish ? weigth : ''}
+      {renderInnerContent()}
     </td>
   );
 }

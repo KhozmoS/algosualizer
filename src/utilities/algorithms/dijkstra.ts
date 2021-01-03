@@ -15,6 +15,11 @@ export function RunDijkstra(grid:ShortestPathNodeProps[][], start: Point, end: P
   queue.push(grid[start.x][start.y]);
   cost[start.x][start.y] = 0;
   while(queue.length > 0) {
+    // queue = queue.sort((a, b) => {
+    //   if (cost[a.row][a.col] < cost[b.row][b.col]) return -1;
+    //   if (cost[a.row][a.col] === cost[b.row][b.col]) return 0;
+    //   return 1;
+    // });
     const node = queue.shift() as ShortestPathNodeProps;
     for (let i = 0; i < 4; i++) {
       const nwX = node.row + stepX[i];
