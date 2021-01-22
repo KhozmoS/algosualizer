@@ -24,7 +24,7 @@ const algos = [
     image: shortestImage,
     algoName: "Shortest Path",
     docLink: "docs",
-    visuaLink: "shortest-path-visual"
+    visuaLink: "algosualizer/shortest-path-visual"
   }
 ] as AlgoCardProps[]
 

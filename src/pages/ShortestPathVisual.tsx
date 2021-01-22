@@ -40,7 +40,7 @@ let grid = gridStore.initGrid() as ShortestPathNodeProps[][];
 export function ShortestPathVisual() {
   const classes = useStyles();
   const [blocked, setBlocked] = React.useState(false);
-  const [algo, setAlgo] = React.useState<Algorithm|''>('');
+  const [algo, setAlgo] = React.useState<Algorithm>(Algorithm.BFS);
   const [mouseIsDown, setMouseIsDown] = React.useState(false);
   const [startSelected, setStartSelected] = React.useState(false);
   const [finishSelected, setFinishSelected] = React.useState(false);
@@ -191,9 +191,6 @@ export function ShortestPathVisual() {
                   label="Algorithm"
                   disabled={blocked}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   <MenuItem value={Algorithm.BFS}>
                     {Algorithm.BFS}
                   </MenuItem>
