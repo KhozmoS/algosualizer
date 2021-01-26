@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core";
 import {
   BrowserRouter as Router,
-  Switch,
+  // Switch,
   Route,
   HashRouter
 } from "react-router-dom";
@@ -26,18 +26,10 @@ function App() {
       <>
         <TopBar />
         <Router>
-          <Box className={classes.homeContainer}>
-          <Switch>
-            <Route path="/shortest-path-visual">
-              <ShortestPathVisual />
-            </Route>
-            <Route path="/">
-              <Box className={classes.home}>
-                <Home />              
-              </Box>
-            </Route>          
-          </Switch>
+          <Box className={classes.home}>
+            <Route exact path="/" component={Home} />
           </Box>
+          <Route path="/shortest-path-visual" component={ShortestPathVisual} />          
         </Router>
       </>
     </HashRouter>
