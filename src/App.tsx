@@ -1,12 +1,13 @@
 import React from "react";
 import { TopBar } from "./components/TopBar";
-import { Home, ShortestPathVisual} from "./pages";
+import { Home, ShortestPathVisual } from "./pages";
 import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core";
 import {
   BrowserRouter as Router,
   Switch,
-  Route  
+  Route,
+  HashRouter
 } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,23 +22,25 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   return (
-    <>
-      <TopBar />
-      <Router>
-        <Box className={classes.homeContainer}>
-        <Switch>
-          <Route path="/algosualizer/shortest-path-visual">
-            <ShortestPathVisual />
-          </Route>
-          <Route path="/algosualizer">
-            <Box className={classes.home}>
-              <Home />              
-            </Box>
-          </Route>          
-        </Switch>
-        </Box>
-      </Router>
-    </>
+    <HashRouter basename='/'>
+      <>
+        <TopBar />
+        <Router>
+          <Box className={classes.homeContainer}>
+          <Switch>
+            <Route path="/shortest-path-visual">
+              <ShortestPathVisual />
+            </Route>
+            <Route path="/">
+              <Box className={classes.home}>
+                <Home />              
+              </Box>
+            </Route>          
+          </Switch>
+          </Box>
+        </Router>
+      </>
+    </HashRouter>
   );
 }
 
