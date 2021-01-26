@@ -1,27 +1,32 @@
-import React, { Component } from 'react';
-import { HashRouter, Route, Link } from "react-router-dom";
+import React from 'react';
+import { HashRouter, Route } from "react-router-dom";
+import { TopBar } from "./components/TopBar";
+import { Home, ShortestPathVisual } from "./pages";
+import Box from '@material-ui/core/Box';
+import { makeStyles } from "@material-ui/core";
 
-class App extends Component {
-  render() {
-    return (
-      <HashRouter basename="/">
-        <div>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
-          </ul>
-
-          <hr />
-  
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
-        </div>
-      </HashRouter>
-    );
+const useStyles = makeStyles((theme) => ({
+  homeContainer: {
+    minHeight: 'calc(100vh - 64px)',
+  },
+  home: {
+    margin: 'auto',
+    width: '100%'
   }
+}));
+const App = () => {
+  const classes = useStyles();
+  return (
+    <HashRouter basename="/">
+      <div>
+        <TopBar />
+        <Box className={classes.home}>
+          <Route exact path="/" component={Home} />
+        </Box>
+        <Route path="/shortest-path-visual" component={ShortestPathVisual} />
+      </div>
+    </HashRouter>
+  );
 }
-
-const Home = () => <div><h2>Home</h2></div>
-const About = () => <div><h2>About</h2></div>
 
 export default App;
