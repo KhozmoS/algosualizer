@@ -1,4 +1,4 @@
-# algosualizer
+# Algosualizer
 
 This project is an intended tool for visualization in detail of Graph theory, Number theory, Sorting & Search
 and Data Structures algorithms.
