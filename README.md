@@ -6,7 +6,7 @@ and Data Structures algorithms.
 
 Developed using React js and RxJs for store management.
 
-[here](https://khozmos.github.io/algosualizer/#/) you can see how it works!
+[Here](https://khozmos.github.io/algosualizer/#/) you can see how it works!
 
 Inspired by [Clément](https://github.com/clementmihailescu) vanilla js path finding project.
 
