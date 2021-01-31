@@ -7,4 +7,4 @@ and Data Structures algorithms.
  Developed using React js and RxJs for store management.
 
 
- Inspired by [https://github.com/clementmihailescu](Clément) vanilla js path finding project.
+ Inspired by [Clément](https://github.com/clementmihailescu) vanilla js path finding project.
