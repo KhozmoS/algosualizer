@@ -4,13 +4,32 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@material-ui/core';
-import theme from "./utilities/global.theme";
+import { themes } from "./utilities/global.theme";
+import { Theme } from "./models";
+import { globalStore } from "./store";
 
+const Boostraping = () => {
+  const [theme, setTheme] = React.useState<Theme>(
+    localStorage.getItem("theme") as Theme || Theme.TEAL_BLUE
+  );
+  React.useEffect(() => {
+    const subs = globalStore.$theme.subscribe((newTheme: Theme) => {
+      setTheme(newTheme);
+    });
+    return () => {
+      if (subs)
+        subs.unsubscribe();
+    };
+  }, []);
+  return (
+    <ThemeProvider theme={themes[theme]}>
+      <App />
+    </ThemeProvider>
+  );
+}
 
-ReactDOM.render(  
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>,
+ReactDOM.render(
+  <Boostraping />,
   document.getElementById('root')
 );
 

@@ -1,4 +1,4 @@
 export enum Algorithm {
   BFS = 'BFS O(N)',
-  DIJKSTRA = 'Dijkstra O(N^2)',
+  DIJKSTRA = 'Dijkstra O(NlogN)',
 }

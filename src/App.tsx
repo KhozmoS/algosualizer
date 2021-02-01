@@ -18,13 +18,13 @@ const App = () => {
   const classes = useStyles();
   return (
     <HashRouter basename="/">
-      <div>
+      <Box>
         <TopBar />
         <Box className={classes.home}>
           <Route exact path="/" component={Home} />
         </Box>
         <Route path="/shortest-path-visual" component={ShortestPathVisual} />
-      </div>
+      </Box>
     </HashRouter>
   );
 }
